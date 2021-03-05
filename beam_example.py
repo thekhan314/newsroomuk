@@ -13,10 +13,7 @@ df_hate_words.set_index('ngram',drop=True,inplace=True)
 dict_hateweights = df_hate_words['prophate'].to_dict()
 hate_list = list(df_hate_words.index)
 
-unlab_cvect = CountVectorizer(
-    ngram_range=(1,4),
-    vocabulary = hate_list
-)
+
 
 
 
@@ -29,6 +26,11 @@ def tokenize(tweet):
     tokens = [stemmer.stem(t) for t in tweet.split()]
     return tokens
 
+unlab_cvect = CountVectorizer(
+    ngram_range=(1,4),
+    vocabulary = hate_list,
+    tokenizer = tokenizer
+)
 class WordExtractingDoFn(beam.DoFn):
     def vect(self,element):
         unlab_vectors = unlab_cvect.fit(element['text'])
