@@ -7,6 +7,12 @@ import re
 import apache_beam as beam
 import argparse
 from apache_beam.options.pipeline_options import PipelineOptions
+from nltk.stem.porter import *
+import warnings
+warnings.filterwarnings('ignore') 
+
+from datetime import datetime
+print(datetime.now())
 
 df_hate_words = pd.read_csv('data/raw_other/hateful_ngrams.csv')
 df_hate_words.set_index('ngram',drop=True,inplace=True)
@@ -15,7 +21,7 @@ hate_list = list(df_hate_words.index)
 
 
 
-
+stemmer = PorterStemmer()
 
 def tokenize(tweet):
     """Removes punctuation & excess whitespace, sets to lowercase,
@@ -29,24 +35,37 @@ def tokenize(tweet):
 unlab_cvect = CountVectorizer(
     ngram_range=(1,4),
     vocabulary = hate_list,
-    tokenizer = tokenizer
+    tokenizer = tokenize
 )
+def tally_counts_doc(row):
+    row2 = row[row > 0]
+    score = 0
+    hits = {}
+    for index,val in row2.items():
+        hits[index]=val
+        hit = dict_hateweights[index] * val
+        score += hit 
+    row['hate_score'] = score
+    row['hate_hits'] = hits
+
+    return row
+
 class WordExtractingDoFn(beam.DoFn):
-    def vect(self,element):
-        unlab_vectors = unlab_cvect.fit(element['text'])
-        unlab_matrix = unlab_vectors.transform(element['text'])
+    def process(self,element):
+        unlab_vectors = unlab_cvect.fit([element['text']])
+        unlab_matrix = unlab_vectors.transform([element['text']])
         df_vectors = pd.DataFrame(unlab_matrix.todense())
         df_vectors = df_vectors.apply(lambda row:tally_counts_doc(row),axis=1,result_type='expand')
 
-        yield df_vectors
+        yield df_vectors[['hate_score','hate_hits']].to_dict()
 
   
 
 
 def run():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", dest="input", default = "data/samp_utterances.parquet", required=True)
-    parser.add_argument("--output", dest="output", default = "data/", required=True)
+    parser.add_argument("--input", dest="input", default = "data/samp_utterances.parquet")
+    parser.add_argument("--output", dest="output", default = "data/")
     app_args, pipeline_args = parser. parse_known_args()
 
 
@@ -54,8 +73,11 @@ def run():
         
         data = p | beam.io.parquetio.ReadFromParquet(app_args.input)
         output = data | beam.ParDo(WordExtractingDoFn())
-        output | beam.io.parquetio.WriteToParquet('data/samp_output')
+        output | beam.io.textio.WriteToText('data/samp_output.csv')
 
 
-if __name__ == 'main':
-    run()
+
+run()
+
+from datetime import datetime
+print(datetime.now())
