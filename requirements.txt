@@ -1,19 +1,16 @@
-apache-beam @ file:///home/conda/feedstock_root/build_artifacts/apache-beam_1614023481924/work
+apache-beam==2.28.0
 avro-python3==1.9.2.1
-brotlipy==0.7.0
 cachetools==4.2.1
 certifi==2020.6.20
-cffi @ file:///home/conda/feedstock_root/build_artifacts/cffi_1613413861439/work
-chardet @ file:///home/conda/feedstock_root/build_artifacts/chardet_1610093490430/work
+cffi==1.14.5
+chardet==4.0.0
 click==7.1.2
-crcmod @ file:///home/conda/feedstock_root/build_artifacts/crcmod_1613249137066/work
-cryptography @ file:///home/conda/feedstock_root/build_artifacts/cryptography_1612993729974/work
-Cython @ file:///home/conda/feedstock_root/build_artifacts/cython_1613867105642/work
+crcmod==1.7
 dill==0.3.1.1
 docopt==0.6.2
-fastavro @ file:///home/conda/feedstock_root/build_artifacts/fastavro_1613393109396/work
+fastavro==1.3.2
 fasteners==0.16
-future @ file:///home/conda/feedstock_root/build_artifacts/future_1610147327521/work
+future==0.18.2
 google-api-core==1.26.1
 google-apitools==0.5.31
 google-auth==1.27.1
@@ -32,42 +29,38 @@ google-crc32c==1.1.2
 google-resumable-media==1.2.0
 googleapis-common-protos==1.53.0
 grpc-google-iam-v1==0.12.3
-grpcio @ file:///home/conda/feedstock_root/build_artifacts/grpcio_1614828337956/work
+grpcio==1.36.1
 grpcio-gcp==0.2.2
-hdfs @ file:///home/conda/feedstock_root/build_artifacts/python-hdfs_1613347766850/work
-httplib2==0.17.0
-idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1593328102638/work
-joblib @ file:///tmp/build/80754af9/joblib_1601912903842/work
+hdfs==2.6.0
+httplib2==0.17.4
+idna==2.10
+joblib==1.0.1
 libcst==0.3.17
-mock @ file:///home/conda/feedstock_root/build_artifacts/mock_1612982353320/work
+mock==2.0.0
 mypy-extensions==0.4.3
 nltk==3.5
-numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1610324535485/work
+numpy==1.19.5
 oauth2client==4.1.3
 packaging==20.9
-pandas @ file:///tmp/build/80754af9/pandas_1602088120436/work
-pbr @ file:///home/conda/feedstock_root/build_artifacts/pbr_1603172942234/work
+pandas==1.2.3
+pbr==5.5.1
 proto-plus==1.14.2
 protobuf==3.15.5
 pyarrow==2.0.0
 pyasn1==0.4.8
-pyasn1-modules==0.2.7
-pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1593275161868/work
-pydot @ file:///home/conda/feedstock_root/build_artifacts/pydot_1613571139672/work
-pykerberos @ file:///home/conda/feedstock_root/build_artifacts/pykerberos_1610099614310/work
-pymongo @ file:///home/conda/feedstock_root/build_artifacts/pymongo_1602533705095/work
-pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1608055815057/work
+pyasn1-modules==0.2.8
+pycparser==2.20
+pydot==1.4.2
+pymongo==3.11.3
 pyparsing==2.4.7
-PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1610291447907/work
 python-dateutil==2.8.1
-pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1612179539967/work
+pytz==2021.1
 PyYAML==5.4.1
 regex==2020.11.13
-requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1608156231189/work
-requests-kerberos @ file:///home/conda/feedstock_root/build_artifacts/requests-kerberos_1612972349986/work
-rsa @ file:///home/conda/feedstock_root/build_artifacts/rsa_1614171254180/work
-six @ file:///home/conda/feedstock_root/build_artifacts/six_1590081179328/work
+requests==2.25.1
+rsa==4.7.2
+six==1.15.0
 tqdm==4.58.0
-typing-extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1602702424206/work
+typing-extensions==3.7.4.3
 typing-inspect==0.6.0
-urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1611695416663/work
+urllib3==1.26.3
