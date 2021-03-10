@@ -1,6 +1,3 @@
-from datetime import datetime
-print(datetime.now())
-
 from typing import List, Optional
 import pandas as pd
 #from sklearn.feature_extraction.text import CountVectorizer
@@ -16,9 +13,21 @@ import warnings
 warnings.filterwarnings('ignore') 
 import pyarrow
 
+p_options = {
+    'project':'gcpnroom',
+    'region':'us-west4',
+    'runner':'DataflowRunner',
+    'input':'gs://nroom_utters/input/combined_utterances.parquet',
+    'output': 'gs://nroom_utters/output/',
+    'staging':'gs://nroom_utters/staging',
+    'temp_location':'gs://nroom_utters/tmp',
+    'save_main_session':True,
+    'setup_file': './setup.py'
+}
+
+pipeline_options = PipelineOptions(flags=[], **p_options)
+
 stemmer = PorterStemmer()
-
-
 
 df_hate_words = pd.read_csv('data/raw_other/hateful_ngrams.csv')
 df_hate_words.set_index('ngram',drop=True,inplace=True)
@@ -54,7 +63,7 @@ class WordExtractingDoFn(beam.DoFn):
 
         master += tokens
 
-        hate_score = 0
+        hate_score = 0.0
         hate_hits = {}
 
         for gram in master:
@@ -63,7 +72,8 @@ class WordExtractingDoFn(beam.DoFn):
                     hate_hits[gram] += 1 
                 else:
                     hate_hits[gram] = 1
-                hate_score += dict_hateweights[gram]
+                hate_score = hate_score + float(dict_hateweights[gram])
+
         element['hate_score'] = hate_score
         element['hate_hits'] = str(hate_hits)
 
@@ -77,28 +87,22 @@ schema = pyarrow.schema([
     ('timestamp',pyarrow.int64()),
     ('source',pyarrow.string()),
     ('text',pyarrow.string()),
-    ('hate_score',pyarrow.int64()),
+    ('hate_score',pyarrow.float64()),
     ('hate_hits',pyarrow.string())
     ])
 
+import apache_beam as beam
+
 def run():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input", dest="input", default = "data/samp_utterances.parquet")
-    parser.add_argument("--output", dest="output", default = "data/samp_out")
-    app_args, pipeline_args = parser. parse_known_args()
 
-
-    with beam.Pipeline(options=PipelineOptions(pipeline_args)) as p:
+    with beam.Pipeline(options=pipeline_options) as p:
         
-        data = p | beam.io.parquetio.ReadFromParquet(app_args.input)
+        data = p | beam.io.parquetio.ReadFromParquet(p_options['input'])
         output = data | beam.ParDo(WordExtractingDoFn())
-        output | beam.io.parquetio.WriteToParquet(app_args.output,schema=schema)
+        output | beam.io.parquetio.WriteToParquet(p_options['output'],schema=schema)
 
 
+if __name__ == "__main__":
+    run()
 
-run()
-
-
-
-from datetime import datetime
-print(datetime.now())
+S
