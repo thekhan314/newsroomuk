@@ -13,13 +13,16 @@ import warnings
 warnings.filterwarnings('ignore') 
 import pyarrow
 
+in_out = {'input':'gs://nroom_utters/input/combined_utterances.parquet','output':'gs://nroom_utters/output/','runner':'DataflowRunner'}
+#in_out = {'input':'data/samp_utterances.parquet','output':'data/out','runner':'DirectRunner'}
+
 p_options = {
     'project':'gcpnroom',
     'region':'us-west4',
-    'runner':'DataflowRunner',
+    'runner':in_out['runner'],
     'input':'gs://nroom_utters/input/combined_utterances.parquet',
     'output': 'gs://nroom_utters/output/',
-    'staging':'gs://nroom_utters/staging',
+    'staging_location':'gs://nroom_utters/staging',
     'temp_location':'gs://nroom_utters/tmp',
     'save_main_session':True,
     'setup_file': './setup.py'
@@ -97,12 +100,12 @@ def run():
 
     with beam.Pipeline(options=pipeline_options) as p:
         
-        data = p | beam.io.parquetio.ReadFromParquet(p_options['input'])
+        data = p | beam.io.parquetio.ReadFromParquet(in_out['input'])
         output = data | beam.ParDo(WordExtractingDoFn())
-        output | beam.io.parquetio.WriteToParquet(p_options['output'],schema=schema)
+        output | beam.io.parquetio.WriteToParquet(in_out['output'],schema=schema)
 
 
 if __name__ == "__main__":
     run()
 
-S
+
