@@ -25,7 +25,8 @@ p_options = {
     'staging_location':'gs://nroom_utters/staging',
     'temp_location':'gs://nroom_utters/tmp',
     'save_main_session':True,
-    'setup_file': './setup.py'
+    'setup_file': './setup.py',
+    'service_account_email':'nroomservice@gcpnroom.iam.gserviceaccount.com'
 }
 
 pipeline_options = PipelineOptions(flags=[], **p_options)
