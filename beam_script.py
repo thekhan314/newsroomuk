@@ -19,7 +19,7 @@ in_out = {'input':'gs://nroom_utters/input/combined_utterances.parquet','output'
 p_options = {
     'project':'gcpnroom',
     'region':'us-west4',
-    'runner':in_out['runner'],
+    'runner':in_out['ru,
     'input':'gs://nroom_utters/input/combined_utterances.parquet',
     'output': 'gs://nroom_utters/output/',
     'staging_location':'gs://nroom_utters/staging',
@@ -28,6 +28,9 @@ p_options = {
     'setup_file': './setup.py',
     'service_account_email':'nroomservice@gcpnroom.iam.gserviceaccount.com'
 }
+
+
+from apache_beam.options.pipeline_options import PipelineOptions
 
 pipeline_options = PipelineOptions(flags=[], **p_options)
 
